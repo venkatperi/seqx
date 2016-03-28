@@ -1,6 +1,10 @@
 {
   "name": "moduletag",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/venkatperi/moduletag.git"
+  },
   "preferGlobal": false,
   "description": "create a 'tag' for node modules",
   "dependencies": {
