@@ -1,17 +1,13 @@
 {
-  "name": "moduletag",
+  "name": "seqx",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/venkatperi/moduletag.git"
+    "url": "https://github.com/venkatperi/seqx.git"
   },
   "preferGlobal": false,
-  "description": "create a 'tag' for node modules",
+  "description": "execute tasks sequentially",
   "dependencies": {
-    "node-walkup": "^1.0.1",
-    "pkginfo-async": "^1.0.1",
-    "underscore": "^1.8.3",
-    "underscore.string": "^3.3.4"
   },
   "engines": {
     "node": ">= 0.6.0",

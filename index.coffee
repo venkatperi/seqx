@@ -1,3 +1,3 @@
-module.exports = require "./lib/moduletag"
-  
-  
+Seq = require "./lib/Seq"  
+
+module.exports = Seq  
