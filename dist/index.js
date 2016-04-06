@@ -1,11 +1,11 @@
-var Seq, seq;
+var SeqX, seqx;
 
-Seq = require("./lib/Seq");
+SeqX = require("./lib/SeqX");
 
-seq = function(opts) {
-  return new Seq(opts);
+seqx = function(opts) {
+  return new SeqX(opts);
 };
 
-seq.Seq = Seq;
+seqx.SeqX = SeqX;
 
-module.exports = seq;
+module.exports = seqx;
