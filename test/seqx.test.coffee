@@ -1,12 +1,11 @@
 should = require( "should" )
 assert = require( "assert" )
-Seq = require( '../index' )
+seqx = require( '../index' )
 
-describe "seq", ->
+describe "seqx", ->
 
-  it "returns a promise for the addded task", ( done ) ->
-    seq = new Seq()
-    p = seq.add -> 1
+  it "returns a promise for the added task", ( done ) ->
+    p = seqx().add -> 1
     p.then ( x ) ->
       x.should.equal 1
       done()
@@ -14,9 +13,9 @@ describe "seq", ->
     .done()
 
   it "passes the result of a task to the next", ( done ) ->
-    seq = new Seq()
-    seq.add -> 1
-    p = seq.add ( x ) -> x + 1
+    s = seqx()
+    s.add -> 1
+    p = s.add ( x ) -> x + 1
     p.then ( x ) ->
       x.should.equal 2
       done()
@@ -24,13 +23,13 @@ describe "seq", ->
     .done()
 
   it "executes tasks in sequence", ( done ) ->
-    seq = new Seq()
+    s = new seqx.SeqX()
     res = []
-    seq.add -> res.push 1
-    seq.add -> res.push 2
-    seq.add -> res.push 3
-    seq.add -> res.push 4
-    p = seq.add -> res.push 5
+    s.add -> res.push 1
+    s.add -> res.push 2
+    s.add -> res.push 3
+    s.add -> res.push 4
+    p = s.add -> res.push 5
     p.then ->
       assert.deepEqual res, [ 1, 2, 3, 4, 5 ]
       done()
@@ -38,9 +37,9 @@ describe "seq", ->
     .done()
 
   it "call with an array of tasks", ( done ) ->
-    seq = new Seq()
+    s = seqx()
     res = []
-    seq.add (-> res.push 1),
+    s.add (-> res.push 1),
       (-> res.push 2),
       (-> res.push 3),
       (-> res.push 4),
@@ -52,13 +51,13 @@ describe "seq", ->
     .done()
 
   it "passes a task counter as the second argument", ( done ) ->
-    seq = new Seq()
+    s = seqx()
     res = []
-    seq.add ( val, i ) -> res.push i
-    seq.add ( val, i ) -> res.push i
-    seq.add ( val, i ) -> res.push i
-    seq.add ( val, i ) -> res.push i
-    seq.add ( val, i ) -> res.push i
+    s.add ( val, i ) -> res.push i
+    s.add ( val, i ) -> res.push i
+    s.add ( val, i ) -> res.push i
+    s.add ( val, i ) -> res.push i
+    s.add ( val, i ) -> res.push i
     .then ->
       assert.deepEqual res, [ 0, 1, 2, 3, 4 ]
       done()
@@ -66,9 +65,9 @@ describe "seq", ->
     .done()
 
   it "add a task 'n' times", ( done ) ->
-    seq = new Seq()
+    s = seqx()
     res = []
-    seq.addn (( val, i ) -> res.push i), 5
+    s.addn (( val, i ) -> res.push i), 5
     .then ->
       assert.deepEqual res, [ 0, 1, 2, 3, 4 ]
       done()
@@ -77,24 +76,34 @@ describe "seq", ->
 
   it "passes a context object as the third argument to a task", ( done ) ->
     res = []
-    seq = new Seq context: res
-    seq.addn (( val, i, context ) -> context.push i), 5
+    seqx context : res
+    .addn (( val, i, context ) -> context.push i), 5
     .then ->
       assert.deepEqual res, [ 0, 1, 2, 3, 4 ]
       done()
     .fail done
     .done()
 
-  it "disable autostart", ( done ) ->
+  it "disable auto start", ( done ) ->
     res = []
-    seq = new Seq context: res, manual: true
-    seq.addn (( val, i, context ) -> context.push i), 5
+    s = seqx context : res, manual : true
+    
+    s.addn (( val, i, context ) -> context.push i), 5
     .then ->
       assert.deepEqual res, [ 0, 1, 2, 3, 4 ]
       done()
     .fail done
     .done()
 
-    setTimeout seq.start, 500
+    setTimeout s.start, 500
 
-
+  it "can be aborted", ( done ) ->
+    s = seqx()
+    res = []
+    p = s.addn (( val, i ) -> res.push i), 5
+    s.abort()
+    p.then ->
+      done "Should't get here"
+    .fail (err) ->
+      err.message.should.equal "Aborted by user"
+      done()

@@ -8,6 +8,7 @@
   "preferGlobal": false,
   "description": "execute tasks sequentially",
   "dependencies": {
+    "q": "^1.4.1"
   },
   "engines": {
     "node": ">= 0.6.0",

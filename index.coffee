@@ -1,3 +1,7 @@
-Seq = require "./lib/Seq"  
+SeqX = require "./lib/SeqX"
 
-module.exports = Seq  
+seqx = ( opts ) -> new SeqX opts
+
+seqx.SeqX = SeqX
+
+module.exports = seqx

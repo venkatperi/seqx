@@ -9,9 +9,9 @@ module.exports = Seq = (function() {
     if (opts == null) {
       opts = {};
     }
+    this.actualAdd = __bind(this.actualAdd, this);
     this.addn = __bind(this.addn, this);
     this.add = __bind(this.add, this);
-    this.actualAdd = __bind(this.actualAdd, this);
     this.start = __bind(this.start, this);
     this.manual = opts.manual || false;
     if (opts.context != null) {
@@ -35,16 +35,6 @@ module.exports = Seq = (function() {
     return this.initial.resolve(true);
   };
 
-  Seq.prototype.actualAdd = function(fn) {
-    var f;
-    f = (function(_this) {
-      return function(args) {
-        return Q.fcall(fn, args, _this.count++, _this.context);
-      };
-    })(this);
-    return this.task = this.task.then(f);
-  };
-
   Seq.prototype.add = function() {
     var f, fn, _i, _len;
     fn = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -61,6 +51,16 @@ module.exports = Seq = (function() {
       this.actualAdd(fn);
     }
     return this.task;
+  };
+
+  Seq.prototype.actualAdd = function(fn) {
+    var f;
+    f = (function(_this) {
+      return function(args) {
+        return Q.fcall(fn, args, _this.count++, _this.context);
+      };
+    })(this);
+    return this.task = this.task.then(f);
   };
 
   return Seq;
