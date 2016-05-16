@@ -65,7 +65,7 @@ module.exports = class SeqX extends EventEmitter
     f = ( args ) =>
       id = @count++
       x = Q.fcall fn, args, id, @context
-      @emit 'completed', id, @context
+      x.then ( res ) => @emit 'completed', res, id, @context
       x
     @task = @task
     .then ( args ) =>

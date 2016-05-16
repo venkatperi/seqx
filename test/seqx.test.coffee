@@ -12,6 +12,16 @@ describe "seqx", ->
     .fail done
     .done()
 
+  it "emits 'completed' when task is done", ( done ) ->
+    seqx()
+    .on 'completed', ( result, id ) ->
+      result.should.equal 1
+      id.should.equal 0
+      done()
+    .add -> 1
+    .fail done
+    .done()
+
   it "passes the result of a task to the next", ( done ) ->
     s = seqx()
     s.add -> 1

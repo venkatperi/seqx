@@ -68,16 +68,14 @@ Starts executing tasks on the task queue. Relevant only when the `manual: true` 
 ## Events
 `seqx` emits the following events:
 
-### "start"
+### on('start', cb())
 Emitted when task execution begins.
 
-### "task"
-Emitted when a new task is added. The new task is available as an argument to the event.
+### on('task', cb(fn))
+Emitted when a new task is added. The task **fn** is available as an argument to the event.
 
-### "completed"
+### on('completed', cb(result, id, context))
+Emitted when a  task is completed. Callback receives the result of the task, the task id and the context, if any.
 
-Emitted when a  task is complated. The new task is available as an argument to the event.
-
-### "abort"
-
+### on('abort', cb())
 Emitted if `abort()` is called.
