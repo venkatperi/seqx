@@ -21,10 +21,15 @@
     "test": "mocha"
   },
   "devDependencies": {
+    "coffee-coverage": "^1.0.1",
+    "coffeescope2": "^0.3.0",
     "grunt": "^0.4.5",
+    "grunt-coffeelint": "0.0.15",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-coffee": "^0.12.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-exec": "^0.4.7",
+    "grunt-istanbul": "^0.7.0",
     "should": "^4.4.1"
   },
   "author": "Venkat Peri <venkatperi@gmail.com> (http://www.vperi.com/)",

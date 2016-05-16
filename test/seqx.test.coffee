@@ -1,6 +1,6 @@
-should = require( "should" )
-assert = require( "assert" )
-seqx = require( '../index' )
+should = require("should")
+assert = require("assert")
+seqx = require('../index')
 
 describe "seqx", ->
 
@@ -87,7 +87,7 @@ describe "seqx", ->
   it "disable auto start", ( done ) ->
     res = []
     s = seqx context : res, manual : true
-    
+
     s.addn (( val, i, context ) -> context.push i), 5
     .then ->
       assert.deepEqual res, [ 0, 1, 2, 3, 4 ]
@@ -104,6 +104,6 @@ describe "seqx", ->
     s.abort()
     p.then ->
       done "Should't get here"
-    .fail (err) ->
+    .fail ( err ) ->
       err.message.should.equal "Aborted by user"
       done()

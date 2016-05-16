@@ -1,7 +1,7 @@
 Q = require 'q'
-EventEmitter = require( "events" ).EventEmitter
+EventEmitter = require("events").EventEmitter
 
-# Sequential task executor 
+# Sequential task executor
 module.exports = class SeqX extends EventEmitter
 
   # Public: constructor
@@ -29,7 +29,7 @@ module.exports = class SeqX extends EventEmitter
     return if @started
     @started = true
     @initial.resolve true
-    @emit "start"
+    @emit 'start'
 
   # Public: Add the given task(s) to the queue
   #
@@ -45,7 +45,7 @@ module.exports = class SeqX extends EventEmitter
   # * `fn` {Function} The task to add
   # * `n ` {Number} Number of time to execute the task
   #
-  # Returns a promise which resolves the last iteration is complete 
+  # Returns a promise which resolves the last iteration is complete
   addn : ( fn, n ) =>
     @actualAdd fn for i in [ 0..n - 1 ]
     @task
@@ -55,19 +55,22 @@ module.exports = class SeqX extends EventEmitter
   #
   abort : =>
     @_abort = true
-    @emit "abort"
+    @emit 'abort'
 
   # Private: Adds the task to the seq queue
   #
   # * `fn ` The task to add {Function}
   #
   actualAdd : ( fn ) =>
-    f = ( args ) => Q.fcall fn, args, @count++, @context
+    f = ( args ) =>
+      id = @count++
+      x = Q.fcall fn, args, id, @context
+      @emit 'completed', id, @context
+      x
     @task = @task
     .then ( args ) =>
-      throw new Error "Aborted by user" if @_abort
+      throw new Error 'Aborted by user' if @_abort
       f args
-    @emit "task", fn
+    @emit 'task', fn
       
-
 
