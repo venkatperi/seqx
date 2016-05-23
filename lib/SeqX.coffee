@@ -34,7 +34,8 @@ Tasks are functions. A task can receive one or more arguments, in
 
 1. `result` The result from the previous task. Can be `undefined`.
 2. `id` The task's id which is an incrementing counter.
-3. `context` An optional context object which is was supplied when the executor was created.
+3. `context` An optional context object which is was supplied when the
+  executor was created.
 
 ```javascript
 function task(result, id, context) {
@@ -64,7 +65,7 @@ class SeqX extends EventEmitter
     @count = 0
     @start() unless @manual
 
-  # Public: Start the executor 
+  # Public: Start the executor
   #
   start : =>
     return if @started
@@ -74,7 +75,8 @@ class SeqX extends EventEmitter
 
   # Public: Add the given task(s) to the queue
   #
-  # * `fn...` a {Function} or array of {Function}s to add to the to add to the queue
+  # * `fn...` a {Function} or array of {Function}s to add to the
+  # to add to the queue
   #
   # Returns {Promise} which resolves when the task(s) complete
   #
@@ -84,7 +86,7 @@ class SeqX extends EventEmitter
 
   # Public: Add the given task `n` times
   #
-  # * `fn` {Function} task 
+  # * `fn` {Function} task
   # * `n ` {Number} of time to execute the task
   #
   # Returns {Promise} which resolves the last iteration is complete
@@ -102,7 +104,7 @@ class SeqX extends EventEmitter
 
   # Private: Adds the task to the seq queue
   #
-  # * `fn` {Function} task 
+  # * `fn` {Function} task
   #
   actualAdd : ( fn ) =>
     f = ( args ) =>

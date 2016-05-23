@@ -9,7 +9,11 @@ config = ->
 
     clean : { dist : [ dist, '*.{js,map}', 'lib/**/*.{map,js}' ] }
 
-    coffeelint : { app : src }
+    coffeelint :
+      app : src
+      options :
+        'no_trailing_whitespace' :
+          'level' : 'warn'
 
     watch : { coffee : { tasks : [ 'coffee' ], files : src } }
 

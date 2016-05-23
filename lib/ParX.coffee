@@ -31,7 +31,8 @@ class ParX extends EventEmitter
 
   # Public: Add the given task(s) to the queue
   #
-  # * `fn...` a {Function} or array of {Function}s to add to the to add to the queue
+  # * `fn...` a {Function} or array of {Function}s to add to 
+  # the to add to the queue
   #
   # Returns {Promise} which resolves when the task(s) complete
   #
