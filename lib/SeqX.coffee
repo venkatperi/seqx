@@ -1,14 +1,55 @@
 Q = require 'q'
 EventEmitter = require("events").EventEmitter
 
-# Sequential task executor
-module.exports = class SeqX extends EventEmitter
+###
+Public: {SeqX} Execute tasks sequentially.
 
-  # Public: constructor
+Result of a task is passed to the next. Returns promises which resolve
+when tasks are completed. Fires events when tasks are completed.
+
+# Events
+
+## start
+Public: Fired when task execution begins.
+
+## task
+Public: Fired when a new task is added.
+* `fn` {Function} the task which was added.
+
+## completed
+Public: Fired when a  task is completed. Callback receives the result of the
+ task, the task id and the context, if any.
+
+* `result` the result of the previous task, if any
+* `id` {Int} the task's id
+* `context` (optional) context {Object} given when the executor was created
+
+## abort
+Public: Fired if `abort()` is called on the executor.
+
+
+# Tasks
+Tasks are functions. A task can receive one or more arguments, in
+  the following order:
+
+1. `result` The result from the previous task. Can be `undefined`.
+2. `id` The task's id which is an incrementing counter.
+3. `context` An optional context object which is was supplied when the executor was created.
+
+```javascript
+function task(result, id, context) {
+  return valueForNextTask;
+ }
+```
+
+###
+class SeqX extends EventEmitter
+
+  # Public: Create a SeqX sequential executor
   #
-  # * `opts` options
-  #    * manual - {Boolean} If set, don't start immediate task execution
-  #    * context - {Object} optional context object, passed to tasks
+  # * `opts` {Object} options
+  #    * `manual` {Boolean} If set, don't start immediate task execution
+  #    * `context` optional context {Object} which is passed to tasks
   #
   constructor : ( opts = {} ) ->
     @manual = opts.manual or false
@@ -23,7 +64,7 @@ module.exports = class SeqX extends EventEmitter
     @count = 0
     @start() unless @manual
 
-  # Public: Begin executing tasks
+  # Public: Start the executor 
   #
   start : =>
     return if @started
@@ -33,19 +74,21 @@ module.exports = class SeqX extends EventEmitter
 
   # Public: Add the given task(s) to the queue
   #
-  # * `fn... ` {Function}|[{Function}] One or more tasks to add to the queue
+  # * `fn...` a {Function} or array of {Function}s to add to the to add to the queue
   #
-  # Returns a promise which resolves when the task(s) complete
+  # Returns {Promise} which resolves when the task(s) complete
+  #
   add : ( fn... ) =>
     @actualAdd f for f in fn
     @task
 
   # Public: Add the given task `n` times
   #
-  # * `fn` {Function} The task to add
-  # * `n ` {Number} Number of time to execute the task
+  # * `fn` {Function} task 
+  # * `n ` {Number} of time to execute the task
   #
-  # Returns a promise which resolves the last iteration is complete
+  # Returns {Promise} which resolves the last iteration is complete
+  #
   addn : ( fn, n ) =>
     @actualAdd fn for i in [ 0..n - 1 ]
     @task
@@ -59,7 +102,7 @@ module.exports = class SeqX extends EventEmitter
 
   # Private: Adds the task to the seq queue
   #
-  # * `fn ` The task to add {Function}
+  # * `fn` {Function} task 
   #
   actualAdd : ( fn ) =>
     f = ( args ) =>
@@ -74,3 +117,4 @@ module.exports = class SeqX extends EventEmitter
     @emit 'task', fn
       
 
+module.exports = SeqX
