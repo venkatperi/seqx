@@ -7,6 +7,9 @@ Public: Executes tasks in parallel.
 ###
 class ParX extends EventEmitter
 
+  Object.defineProperty @prototype, 'all',
+    get : -> @allTasks
+
   # Public: Create a ParX sequential executor
   #
   # * `opts` {Object} options
@@ -39,9 +42,6 @@ class ParX extends EventEmitter
   add : ( fn... ) =>
     @actualAdd fn...
     @task
-    
-  all: =>
-    @allTasks
 
   # Public: Abort pending tasks. Executor will throw an exeption
   #  which can be caught with a promise .fail() handler

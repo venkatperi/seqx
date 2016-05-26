@@ -10,7 +10,7 @@ describe "parx", ->
     for i in [ 1..10 ]
       parx.add -> count++
 
-    parx.all().then ->
+    parx.all.then ->
       parx.count.should.equal 10
       count.should.equal 10
       done()
@@ -23,10 +23,10 @@ describe "parx", ->
     for i in [ 1..10 ]
       parx.add -> count++
 
-    parx.all().then ->
+    parx.all.then ->
       for i in [ 1..10 ]
         parx.add -> count++
-      parx.all()
+      parx.all
     .then ->
       parx.count.should.equal 20
       count.should.equal 20
