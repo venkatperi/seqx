@@ -1,3 +1,4 @@
+_ = require 'lodash'
 Q = require 'q'
 EventEmitter = require("events").EventEmitter
 
@@ -34,27 +35,12 @@ class ParX extends EventEmitter
 
   # Public: Add the given task(s) to the queue
   #
-  # * `fn...` a {Function} or array of {Function}s to add to 
+  # * `list...` a {Function} or array of {Function}s to add to
   # the to add to the queue
   #
   # Returns {Promise} which resolves when the task(s) complete
   #
-  add : ( fn... ) =>
-    @actualAdd fn...
-    @task
-
-  # Public: Abort pending tasks. Executor will throw an exeption
-  #  which can be caught with a promise .fail() handler
-  #
-  abort : =>
-    @_abort = true
-    @emit 'abort'
-
-  # Private: Adds the task to the task list 
-  #
-  # * `fn` {Function} task 
-  #
-  actualAdd : ( tasks... ) =>
+  add : ( list... ) =>
     wrap = ( fn ) =>
       id = @count++
       x = Q.fcall fn, id, @context
@@ -62,8 +48,16 @@ class ParX extends EventEmitter
       @emit 'task', fn
       x
 
-    tasks = (wrap(f) for f in tasks)
+    list = _.flattenDeep [list]
+    tasks = (wrap(f) for f in list)
     tasks.push @allTasks
     @allTasks = Q.all tasks
+
+  # Public: Abort pending tasks. Executor will throw an exeption
+  #  which can be caught with a promise .fail() handler
+  #
+  abort : =>
+    @_abort = true
+    @emit 'abort'
 
 module.exports = ParX

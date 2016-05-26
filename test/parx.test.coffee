@@ -20,8 +20,10 @@ describe "parx", ->
   it "add more tasks after first batch", ( done ) ->
     parx = new ParX()
     count = 0
-    for i in [ 1..10 ]
-      parx.add -> count++
+    tasks = for i in [ 1..10 ]
+      -> count++
+
+    parx.add tasks
 
     parx.all.then ->
       for i in [ 1..10 ]
